@@ -6,35 +6,53 @@
         android:background="#fff"
         android:orientation="vertical">
 
-    <TextView
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:text="装维助手登录"
-            android:gravity="center"
-            android:textSize="30sp"
-            />
+    <!--<TextView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:text="login"-->
+            <!--android:gravity="center"-->
+            <!--android:textSize="30sp"-->
+            <!--/>-->
 
     <View android:layout_width="match_parent" android:layout_height="@dimen/dp_1"
           android:background="@color/orange_main"
             />
-    <TextView
-        android:id="@+id/myversionid"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="版本"
-        />
-    <TextView
-        android:id="@+id/myversionname"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/myversionid"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="版本"
+            />
+        <TextView
+            android:id="@+id/myversionname"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="版本1"
+            />
+    </LinearLayout>
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="版本"
-        />
+        android:layout_height="@dimen/dp_250"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="0dp"
+        android:layout_marginTop="0dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/timg"/>
+    </RelativeLayout>
     <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height_normal"
             android:layout_marginLeft="@dimen/margin_large"
             android:layout_marginRight="@dimen/margin_large"
-            android:layout_marginTop="@dimen/dp_120">
+            android:layout_marginTop="@dimen/dp_20">
 
         <ImageView
                 android:id="@+id/img_account"
