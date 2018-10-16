@@ -1,7 +1,10 @@
 package qyw.xhx.zwzs;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +15,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.view.View;
 import android.text.InputType;
+import android.widget.TextView;
 import android.widget.Toast;
 import qyw.xhx.zwzs.widget.LoadingDialog;
 import qyw.xhx.zwzs.util.Base64Utils;
 import qyw.xhx.zwzs.util.SharedPreferencesUtils;
+import qyw.xhx.zwzs.util.APKVersionCodeUtils;
+
 
 
 public class MainActivity extends Activity implements View.OnClickListener,CompoundButton.OnCheckedChangeListener{
@@ -27,6 +33,8 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
     private CheckBox checkBox_login;
     private ImageView iv_see_password;
     private LoadingDialog mLoadingDialog; //显示正在加载的对话框
+    private TextView myversionid;
+    private TextView myversionname;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +42,10 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
         initViews();
         setupEvents();
         initData();
+        String versionCode = APKVersionCodeUtils.getVersionCode(this) + "";
+        String versionName = APKVersionCodeUtils.getVerName(this);
+        myversionid.setText("版本："+versionCode);
+        myversionname.setText("版本名称："+versionName);
     }
 
     private void initViews() {
@@ -43,6 +55,8 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
         checkBox_password = (CheckBox) findViewById(R.id.checkBox_password);
         checkBox_login = (CheckBox) findViewById(R.id.checkBox_login);
         iv_see_password = (ImageView) findViewById(R.id.iv_see_password);
+        myversionid = (TextView) findViewById(R.id.myversionid);
+        myversionname = (TextView) findViewById(R.id.myversionname);
     }
     private void setupEvents() {
         mLoginBtn.setOnClickListener(this);
@@ -332,4 +346,6 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
         });
 
     }
+
+
 }
