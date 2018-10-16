@@ -17,6 +17,17 @@ import android.view.View;
 import android.text.InputType;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.lang.reflect.Type;
+import java.util.List;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+import qyw.xhx.zwzs.util.App_version;
 import qyw.xhx.zwzs.widget.LoadingDialog;
 import qyw.xhx.zwzs.util.Base64Utils;
 import qyw.xhx.zwzs.util.SharedPreferencesUtils;
@@ -35,6 +46,11 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
     private LoadingDialog mLoadingDialog; //显示正在加载的对话框
     private TextView myversionid;
     private TextView myversionname;
+    private String geturl;
+    private String bbcode;
+    private String versionCode;
+    private String versionName;
+    private int bz;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,12 +58,116 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
         initViews();
         setupEvents();
         initData();
-        String versionCode = APKVersionCodeUtils.getVersionCode(this) + "";
-        String versionName = APKVersionCodeUtils.getVerName(this);
-        myversionid.setText("版本："+versionCode);
-        myversionname.setText("版本名称："+versionName);
+        versionCode = APKVersionCodeUtils.getVersionCode(this) + "";
+        versionName = APKVersionCodeUtils.getVerName(this);
+        myversionid.setText("版本："+versionCode+"    版本名称："+versionName);
+        //获取网络版本json
+        myversionname.setText("json");
+        sendVersionRequest();
+
     }
 
+    private void sendVersionRequest(){
+        //获取string.xml升级json url
+        geturl=(String) this.getResources().getText(R.string.get_version_url);
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    OkHttpClient client =new OkHttpClient();
+                    Request request =new Request.Builder()
+                            .url(geturl)
+                            .build();
+                    Response response =client.newCall(request).execute();
+                    String responseDate = response.body().string();
+                    Log.d("aaaa",responseDate);
+                    parseJSONWITHGSON(responseDate);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    private void parseJSONWITHGSON(String jsonDate){
+        Gson gson =new Gson();
+        List<App_version> appList =gson.fromJson(jsonDate, new TypeToken<List<App_version>>()
+        {}.getType());
+        for (App_version app:appList){
+//            Log.d("MainActivity","aaa"+app.getApkname());
+//            Log.d("MainActivity","bbbb"+app.getAppname());
+            bbcode=app.getVerCode();
+        }
+        bz = compareVersion(bbcode,versionCode);
+//        0代表相等，1代表version1大于version2，-1代表version1小于version2
+        Log.d("ddddd","" + bz);
+        //如果版本大，弹窗更新
+        if (bz==1){
+            Log.d("xuyaogengxing","需要更新");
+            MainActivity.this.runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    updialog();
+                }
+            });
+
+        }
+    }
+
+    public void updialog(){
+        AdDialog adDialog = new AdDialog(this);
+        adDialog.onCreateView();
+        adDialog.setUiBeforShow();
+        //点击空白区域能不能退出
+        adDialog.setCanceledOnTouchOutside(true);
+        //按返回键能不能退出
+        adDialog.setCancelable(true);
+        adDialog.show();
+    }
+
+    /**
+     * 版本号比较
+     *
+     * @param version1
+     * @param version2
+     * @return
+     */
+    public static int compareVersion(String version1, String version2) {
+        if (version1.equals(version2)) {
+            return 0;
+        }
+        String[] version1Array = version1.split("\\.");
+        String[] version2Array = version2.split("\\.");
+//        Log.d("HomePageActivity", "version1Array=="+version1Array.length);
+//        Log.d("HomePageActivity", "version2Array=="+version2Array.length);
+        int index = 0;
+        // 获取最小长度值
+        int minLen = Math.min(version1Array.length, version2Array.length);
+        int diff = 0;
+        // 循环判断每位的大小
+//        Log.d("HomePageActivity", "verTag2=2222="+version1Array[index]);
+        while (index < minLen
+                && (diff = Integer.parseInt(version1Array[index])
+                - Integer.parseInt(version2Array[index])) == 0) {
+            index++;
+        }
+        if (diff == 0) {
+            // 如果位数不一致，比较多余位数
+            for (int i = index; i < version1Array.length; i++) {
+                if (Integer.parseInt(version1Array[i]) > 0) {
+                    return 1;
+                }
+            }
+
+            for (int i = index; i < version2Array.length; i++) {
+                if (Integer.parseInt(version2Array[i]) > 0) {
+                    return -1;
+                }
+            }
+            return 0;
+        } else {
+            return diff > 0 ? 1 : -1;
+        }
+    }
     private void initViews() {
         mLoginBtn = (Button) findViewById(R.id.btn_login);
         et_name = (EditText) findViewById(R.id.et_account);
@@ -317,11 +437,11 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
             case R.id.btn_login:
                 loadUserName();    //无论如何保存一下用户名
                 login(); //登陆
-                Log.d("dianji","denglu");
+//                Log.d("dianji","denglu");
                 break;
             case R.id.iv_see_password:
                 setPasswordVisibility();    //改变图片并设置输入框的文本可见或不可见
-                Log.d("dianji","mima");
+//                Log.d("dianji","mima");
                 break;
 
         }
