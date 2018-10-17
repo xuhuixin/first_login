@@ -6,6 +6,7 @@ public class App_version {
     private String apkname;
     private String verName;
     private String verCode;
+    private String verInfo;
 
     public String getAppname(){return appname;}
     public void setAppname(String appname){
@@ -22,5 +23,9 @@ public class App_version {
     public String getVerCode(){return verCode;}
     public void setVerCode(String verCode){
         this.verCode=verCode;
+    }
+    public String getVerInfo(){return verInfo;}
+    public void setVerInfo(String verInfo){
+        this.verInfo=verInfo;
     }
 }

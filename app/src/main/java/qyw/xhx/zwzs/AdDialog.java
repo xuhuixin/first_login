@@ -15,12 +15,17 @@ public class AdDialog extends BaseDialog<AdDialog> {
     private ImageView iv_ad;
     private ImageView back;
     private TextView ts;
+    private String bbcode;
+    private String bbnr;
     private Button sjbtn;
+    private TextView title;
 
 
-    public AdDialog(Context context) {
+    public AdDialog(Context context,String bbcode,String bbnr) {
         super(context);
         this.context = context;
+        this.bbcode = bbcode;
+        this.bbnr = bbnr;
     }
 
     //该方法用来出来数据初始化代码
@@ -31,8 +36,11 @@ public class AdDialog extends BaseDialog<AdDialog> {
         View inflate = View.inflate(context, R.layout.update_dialog, null);
         //用来放整个图片的控件
         iv_ad = (ImageView) inflate.findViewById(R.id.iv_ad);
+        title=(TextView) inflate.findViewById(R.id.tv_title);
+        title.setText("已有最新版本"+bbcode);
         ts = (TextView) inflate.findViewById(R.id.tv_update_info);
-        ts.setText("1、升级\n2、升级");
+//        ts.setText("1、升级\n2、升级");
+        ts.setText(bbnr);
         sjbtn = (Button) inflate.findViewById(R.id.btn_update);
         //放在透明部分和错号上的隐形控件，用来点击使弹窗消失
 //        back = (ImageView) inflate.findViewById(R.id.ad_back);

@@ -48,6 +48,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
     private TextView myversionname;
     private String geturl;
     private String bbcode;
+    private String bbnr;
     private String versionCode;
     private String versionName;
     private int bz;
@@ -96,6 +97,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
 //            Log.d("MainActivity","aaa"+app.getApkname());
 //            Log.d("MainActivity","bbbb"+app.getAppname());
             bbcode=app.getVerCode();
+            bbnr=app.getVerInfo();
         }
         bz = compareVersion(bbcode,versionCode);
 //        0代表相等，1代表version1大于version2，-1代表version1小于version2
@@ -114,13 +116,13 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
     }
 
     public void updialog(){
-        AdDialog adDialog = new AdDialog(this);
+        AdDialog adDialog = new AdDialog(this,bbcode,bbnr);
         adDialog.onCreateView();
         adDialog.setUiBeforShow();
         //点击空白区域能不能退出
-        adDialog.setCanceledOnTouchOutside(true);
+        adDialog.setCanceledOnTouchOutside(false);
         //按返回键能不能退出
-        adDialog.setCancelable(true);
+        adDialog.setCancelable(false);
         adDialog.show();
     }
 
