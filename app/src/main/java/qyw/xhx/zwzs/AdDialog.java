@@ -10,6 +10,8 @@ import android.widget.Toast;
 import com.flyco.dialog.widget.base.BaseDialog;
 import com.squareup.picasso.Picasso;
 
+import androidkun.com.versionupdatelibrary.entity.VersionUpdateConfig;
+
 public class AdDialog extends BaseDialog<AdDialog> {
     private Context context;
     private ImageView iv_ad;
@@ -17,15 +19,17 @@ public class AdDialog extends BaseDialog<AdDialog> {
     private TextView ts;
     private String bbcode;
     private String bbnr;
+    private String bburl;
     private Button sjbtn;
     private TextView title;
+//    private String url;
 
-
-    public AdDialog(Context context,String bbcode,String bbnr) {
+    public AdDialog(Context context,String bbcode,String bbnr,String bburl) {
         super(context);
         this.context = context;
         this.bbcode = bbcode;
         this.bbnr = bbnr;
+        this.bburl=bburl;
     }
 
     //该方法用来出来数据初始化代码
@@ -39,7 +43,6 @@ public class AdDialog extends BaseDialog<AdDialog> {
         title=(TextView) inflate.findViewById(R.id.tv_title);
         title.setText("已有最新版本"+bbcode);
         ts = (TextView) inflate.findViewById(R.id.tv_update_info);
-//        ts.setText("1、升级\n2、升级");
         ts.setText(bbnr);
         sjbtn = (Button) inflate.findViewById(R.id.btn_update);
         //放在透明部分和错号上的隐形控件，用来点击使弹窗消失
@@ -72,6 +75,16 @@ public class AdDialog extends BaseDialog<AdDialog> {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,"shengji",Toast.LENGTH_SHORT).show();
+                VersionUpdateConfig.getInstance()//获取配置实例
+                        .setContext(AdDialog.this.context)//设置上下文
+                        .setDownLoadURL(bburl)//设置文件下载链接
+                        .setNewVersion("1.50")//设置即将下载的APK的版本号
+                        .setNotificationIconRes(R.mipmap.app_icon)//设置通知大图标
+                        .setNotificationSmallIconRes(R.mipmap.app_icon_small)//设置通知小图标
+                        .setNotificationTitle("版本升级Demo")//设置通知标题
+                        .startDownLoad();//开始下载
+
+
                 //处理完逻辑关闭弹框的代码
                 dismiss();
             }

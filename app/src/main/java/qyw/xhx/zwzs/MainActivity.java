@@ -49,6 +49,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
     private String geturl;
     private String bbcode;
     private String bbnr;
+    private String bburl;
     private String versionCode;
     private String versionName;
     private int bz;
@@ -98,6 +99,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
 //            Log.d("MainActivity","bbbb"+app.getAppname());
             bbcode=app.getVerCode();
             bbnr=app.getVerInfo();
+            bburl=app.getApkurl();
         }
         bz = compareVersion(bbcode,versionCode);
 //        0代表相等，1代表version1大于version2，-1代表version1小于version2
@@ -116,7 +118,7 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
     }
 
     public void updialog(){
-        AdDialog adDialog = new AdDialog(this,bbcode,bbnr);
+        AdDialog adDialog = new AdDialog(this,bbcode,bbnr,bburl);
         adDialog.onCreateView();
         adDialog.setUiBeforShow();
         //点击空白区域能不能退出
