@@ -59,13 +59,13 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
         setContentView(R.layout.activity_login);
         initViews();
         setupEvents();
-        initData();
         versionCode = APKVersionCodeUtils.getVersionCode(this) + "";
         versionName = APKVersionCodeUtils.getVerName(this);
-        myversionid.setText("版本："+versionCode+"    版本名称："+versionName);
-        //获取网络版本json
-        myversionname.setText("json");
+        myversionid.setText("版本:"+versionCode+"    版本名称:"+versionName);
+
         sendVersionRequest();
+        initData();
+
 
     }
 
@@ -101,6 +101,9 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
             bbnr=app.getVerInfo();
             bburl=app.getApkurl();
         }
+        //获取网络版本json
+        myversionname.setText("服务器版本:"+bbcode);
+
         bz = compareVersion(bbcode,versionCode);
 //        0代表相等，1代表version1大于version2，-1代表version1小于version2
         Log.d("ddddd","" + bz);
@@ -113,8 +116,8 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
                     updialog();
                 }
             });
-
         }
+
     }
 
     public void updialog(){
@@ -201,13 +204,14 @@ public class MainActivity extends Activity implements View.OnClickListener,Compo
         } else {
             setTextName();//把用户账号放到输入账号的输入框中
         }
-
         //判断是否自动登录
         if (autoLogin()) {
+            Log.d("bz","bz"+bz);
             checkBox_login.setChecked(true);
-            login();//去登录就可以
-
+            //这里需要判断是否需要升级，如果需要升级不能自动登录
+//            login();//去登录就可以
         }
+
     }
     /**
      * 判断是否是第一次登陆
